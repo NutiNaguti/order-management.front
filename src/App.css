@@ -36,3 +36,13 @@
     transform: rotate(360deg);
   }
 }
+
+.App-bar {
+  position: relative
+}
+
+.Layout {
+  width: 600px;
+  marginLeft: auto;
+  marginRight: auto;
+}
