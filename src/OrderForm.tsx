@@ -1,19 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     AppBar,
-    createStyles,
     CssBaseline,
-    Grid,
     makeStyles,
     Paper,
-    Theme,
+    Button,
     Toolbar,
-    Typography, withStyles
+    Typography, Theme, TextField
 } from "@material-ui/core";
-import './Form';
-import Form from "./Form";
+import axios from "axios";
+import Grid from "@material-ui/core/Grid";
 
-const useStyles = makeStyles((theme?: any) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     appBar: {
         position: 'relative'
     },
@@ -49,6 +47,14 @@ const useStyles = makeStyles((theme?: any) => ({
 
 export default function OrderForm() {
     const classes = useStyles();
+    const [data, setData] = useState({
+        firstNameValue: "", secondNameValue: "", shortDescriptionValue: "", priceValue: 0
+    });
+
+    const getData = () => {
+        // TODO поменять вызов на POST запрос
+        return axios('http://localhost:5000/api/HealthCheck');
+    }
 
     return(
         <React.Fragment>
@@ -65,7 +71,23 @@ export default function OrderForm() {
                     <Typography>
                         Форма заказа
                     </Typography>
-                    <Form/>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField required id="firstName" name="firstName" label="First name" fullWidth/>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField required id="lastName" name="lastName" label="Last name" fullWidth/>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField required id="shortDescription" name="shortDescription" label="Short description" fullWidth/>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField required id="price" name="price" label="Price" fullWidth/>
+                        </Grid>
+                    </Grid>
+                    <Button onClick={getData} className={classes.button}>
+                        Создать заказ
+                    </Button>
                 </Paper>
             </main >
         </React.Fragment>
