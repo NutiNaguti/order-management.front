@@ -140,7 +140,7 @@ export default function OrderForm() {
             </AppBar>
             <main>
                 <Grid container className={classes.layout}>
-                    <Paper className={classes.paper}>
+                    <Paper className={classes.paper} style={{width: '48%'}}>
                         <Typography>
                             Форма заказа
                         </Typography>
@@ -184,7 +184,9 @@ export default function OrderForm() {
                                 Создать заказ
                             </Button>
                     </Paper>
-                    <Paper className={classes.paper}>
+                    <Paper className={classes.paper} style={{width: '48%'}}>
+                        <div>
+
                         <Typography>
                             Поиск записей по имени и фамилии
                         </Typography>
@@ -206,15 +208,17 @@ export default function OrderForm() {
                                            fullWidth/>
                             </Grid>
                         </Grid>
-                            <Button onClick={sendRequest} className={classes.button} style={{ top: '40%', left: '80%'}}>
+                            <Button onClick={sendRequest}
+                                    className={classes.button}>
                                 Искать
                             </Button>
+                        </div>
                     </Paper>
                 </Grid>
                 <Grid style={{height: 420, width: '100%'}} className={classes.table}>
                         <DataGrid columns={columns} rows={testRows} pageSize={5}/>
                 </Grid>
-            </main >
+        </main >
         </React.Fragment>
     )
 }
