@@ -42,7 +42,7 @@ export default function CreateOrderForm() {
   const [price, setPrice] = useState(0.0);
 
   const sendRequest = async () => {
-    const response = await axios({
+    const request = await axios({
       method: "POST",
       url: "http://localhost:5000/api/OrderManagement",
       data: {
@@ -50,30 +50,29 @@ export default function CreateOrderForm() {
         description: shortDescription,
         price: price,
       },
+    }).then( response => {
+      console.log(response);
+    }).catch(err => {
+      console.log(err);
     });
-    console.log(response);
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     switch (event.target.name) {
       case "firstName":
         setFirstName(event.target.value);
-        console.log(firstName);
         break;
 
       case "secondName":
         setSecondName(event.target.value);
-        console.log(secondName);
         break;
 
       case "shortDescription":
         setShortDescription(event.target.value);
-        console.log(shortDescription);
         break;
 
       case "price":
         setPrice(Math.abs(parseFloat(event.target.value)));
-        console.log(price);
         break;
     }
   };

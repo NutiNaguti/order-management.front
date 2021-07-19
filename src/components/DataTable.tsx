@@ -1,7 +1,8 @@
 import Grid from "@material-ui/core/Grid";
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { makeStyles, Theme } from "@material-ui/core";
+import axios from "axios";
 
 const useStyles = makeStyles((theme: Theme) => ({
   table: {
@@ -22,158 +23,53 @@ const columns: GridColDef[] = [
   { field: "description", headerName: "Описание", width: 540 },
 ];
 
-const testRows = [
-  {
-    id: 1,
-    date: "01.01.2000",
-    firstName: "John",
-    lastName: "Seena",
-    price: 9999.99,
-    description: "test row",
-  },
-  {
-    id: 2,
-    date: "01.01.2000",
-    firstName: "John",
-    lastName: "Seena",
-    price: 9999.99,
-    description: "test row",
-  },
-  {
-    id: 3,
-    date: "01.01.2000",
-    firstName: "John",
-    lastName: "Seena",
-    price: 9999.99,
-    description: "test row",
-  },
-  {
-    id: 4,
-    date: "01.01.2000",
-    firstName: "John",
-    lastName: "Seena",
-    price: 9999.99,
-    description: "test row",
-  },
-  {
-    id: 5,
-    date: "01.01.2000",
-    firstName: "John",
-    lastName: "Seena",
-    price: 9999.99,
-    description: "test row",
-  },
-  {
-    id: 6,
-    date: "01.01.2000",
-    firstName: "John",
-    lastName: "Seena",
-    price: 9999.99,
-    description: "test row",
-  },
-  {
-    id: 7,
-    date: "01.01.2000",
-    firstName: "John",
-    lastName: "Seena",
-    price: 9999.99,
-    description: "test row",
-  },
-  {
-    id: 8,
-    date: "01.01.2000",
-    firstName: "John",
-    lastName: "Seena",
-    price: 9999.99,
-    description: "test row",
-  },
-  {
-    id: 9,
-    date: "01.01.2000",
-    firstName: "John",
-    lastName: "Seena",
-    price: 9999.99,
-    description: "test row",
-  },
-  {
-    id: 10,
-    date: "01.01.2000",
-    firstName: "John",
-    lastName: "Seena",
-    price: 9999.99,
-    description: "test row",
-  },
-  {
-    id: 11,
-    date: "01.01.2000",
-    firstName: "John",
-    lastName: "Seena",
-    price: 9999.99,
-    description: "test row",
-  },
-  {
-    id: 12,
-    date: "01.01.2000",
-    firstName: "John",
-    lastName: "Seena",
-    price: 9999.99,
-    description: "test row",
-  },
-  {
-    id: 13,
-    date: "01.01.2000",
-    firstName: "John",
-    lastName: "Seena",
-    price: 9999.99,
-    description: "test row",
-  },
-  {
-    id: 14,
-    date: "01.01.2000",
-    firstName: "John",
-    lastName: "Seena",
-    price: 9999.99,
-    description: "test row",
-  },
-  {
-    id: 15,
-    date: "01.01.2000",
-    firstName: "John",
-    lastName: "Seena",
-    price: 9999.99,
-    description: "test row",
-  },
-  {
-    id: 16,
-    date: "01.01.2000",
-    firstName: "John",
-    lastName: "Seena",
-    price: 9999.99,
-    description: "test row",
-  },
-  {
-    id: 17,
-    date: "01.01.2000",
-    firstName: "John",
-    lastName: "Seena",
-    price: 9999.99,
-    description: "test row",
-  },
-  {
-    id: 18,
-    date: "01.01.2000",
-    firstName: "John",
-    lastName: "Seena",
-    price: 9999.99,
-    description: "test row",
-  },
-];
-
 export default function DataTable() {
   const classes = useStyles();
+  const [rows, updateRows] = useState([
+    {
+      id: "",
+      dateTime: "",
+      fio: "",
+      cost: "",
+      description: "",
+    },
+  ]);
+
+  const sendRequest = async () => {
+    const response = await axios({
+      method: "GET",
+      url: "http://localhost:5000/api/OrderManagement",
+    });
+    updateRows(response.data);
+    console.log(response.data);
+  };
+
+  const detailsRows = rows.map((row) => {
+     return  {
+      id: row.id,
+      date: row.dateTime,
+      firstName: row.fio.split(" ")[0],
+      lastName: row.fio.split(" ")[1],
+      price: parseFloat(row.cost),
+      description: row.description,
+    };
+  });
+
+  useEffect(() => {
+    const request = axios({
+      method: "GET",
+      url: "http://localhost:5000/api/OrderManagement",
+    }).then( response => {
+      updateRows(response.data);
+      console.log(response.data);
+    }).catch( err => {
+      console.log(err);
+    })
+  }, [])
+
   return (
     <Grid style={{ height: 420, width: "100%" }} className={classes.table}>
-      <DataGrid columns={columns} rows={testRows} pageSize={5} />
+      <DataGrid columns={columns} rows={detailsRows} pageSize={5} />
     </Grid>
   );
 }

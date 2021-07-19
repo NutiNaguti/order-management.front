@@ -7,7 +7,8 @@ import {
   Typography,
 } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import React, { useState } from "react";
+import React, {ChangeEvent, useState} from "react";
+import axios from "axios";
 
 const useStyles = makeStyles((theme: Theme) => ({
   paper: {
@@ -35,9 +36,27 @@ export default function FindOrdersForm() {
   const [firstName, setFirstName] = useState("");
   const [secondName, setSecondName] = useState("");
 
-  function handleChange() {}
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    switch (event.target.name) {
+      case "firstName":
+        setFirstName(event.target.value);
+        console.log(firstName);
+        break;
 
-  function sendRequest() {}
+      case "secondName":
+        setSecondName(event.target.value);
+        console.log(secondName);
+        break;
+    }
+  }
+
+  const sendRequest = async () => {
+    const response = await axios({
+      method: "GET",
+      url: "http://localhost:5000/api/OrderManagement",
+    });
+    console.log(response.data);
+  };
 
   return (
     <Paper className={classes.paper} style={{ width: "48%" }}>
