@@ -48,7 +48,7 @@ export default function CreateOrderForm() {
   const sendRequest = async () => {
     await axios({
       method: "POST",
-      url: "http://localhost:5000/api/OrderManagement",
+      url: "http://localhost:5000/api/OrderManagement/create",
       data: {
         fio: `${firstName} ${secondName}`,
         description: shortDescription,

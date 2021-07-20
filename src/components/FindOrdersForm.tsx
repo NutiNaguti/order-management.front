@@ -9,6 +9,7 @@ import {
 import Grid from "@material-ui/core/Grid";
 import React, { ChangeEvent, useState } from "react";
 import axios from "axios";
+import { log } from "util";
 
 const useStyles = makeStyles((theme: Theme) => ({
   paper: {
@@ -57,11 +58,20 @@ export default function FindOrdersForm() {
   };
 
   const sendRequest = async () => {
+    const fio: string = firstName + " " + secondName;
     const response = await axios({
       method: "GET",
-      url: "http://localhost:5000/api/OrderManagement",
-    });
-    console.log(response.data);
+      url: "http://localhost:5000/api/OrderManagement/fio",
+      params: {
+        fio: fio,
+      },
+    })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (

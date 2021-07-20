@@ -31,7 +31,10 @@ const columns: GridColDef[] = [
 ];
 
 export default function DataTable() {
+  const emptyStringArray: string[] = [];
+
   const classes = useStyles();
+  const [deleted, setDeleted] = useState(emptyStringArray);
   const [rows, updateRows] = useState([
     {
       id: "",
@@ -53,30 +56,41 @@ export default function DataTable() {
     };
   });
 
-  useEffect(() => {
+  const updateTable = () => {
     axios({
       method: "GET",
       url: "http://localhost:5000/api/OrderManagement",
     })
       .then((response) => {
-        updateRows(response.data);
-        console.log(response.data);
+        if (response.data.length !== 0) updateRows(response.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
-
-  const onSelectionModelChange = (event: any) => {
-    const selectedIDs = new Set(event.selectionModel);
-    const selectedRowData = detailsRows.filter((row) => {
-      selectedIDs.has(row.id);
-    });
-    console.log(selectedRowData);
-    return selectedRowData;
   };
 
-  const handlePurge = () => {};
+  const deleteRows = () => {
+    console.log(deleted);
+    axios({
+      method: "DELETE",
+      url: "http://localhost:5000/api/OrderManagement/delete",
+      data: {
+        deleted,
+      },
+    })
+      .then((response) => {
+        setDeleted([]);
+        console.log(response);
+        updateTable();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    updateTable();
+  }, []);
 
   return (
     <Grid style={{ height: 420, width: "100%" }}>
@@ -84,14 +98,18 @@ export default function DataTable() {
         <Button
           color="secondary"
           variant="contained"
-          onClick={handlePurge}
+          onClick={() => {
+            deleteRows();
+          }}
           className={classes.button}
         >
           Удалить
         </Button>
         <Button
           variant="contained"
-          onClick={handlePurge}
+          onClick={() => {
+            updateTable();
+          }}
           className={classes.button}
         >
           Обновить
@@ -99,7 +117,9 @@ export default function DataTable() {
       </Grid>
       <Grid style={{ height: "100%" }} className={classes.table}>
         <DataGrid
-          onRowSelected={(e) => onSelectionModelChange(e)}
+          onRowSelected={(e) => {
+            setDeleted(deleted.concat(e.data.id));
+          }}
           columns={columns}
           rows={detailsRows}
           pageSize={5}
