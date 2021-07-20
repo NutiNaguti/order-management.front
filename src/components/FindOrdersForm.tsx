@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import React, {ChangeEvent, useState} from "react";
+import React, { ChangeEvent, useState } from "react";
 import axios from "axios";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -17,16 +17,22 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: theme.spacing(2),
     [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
       marginTop: theme.spacing(6),
-      marginBottom: theme.spacing(6),
-      padding: theme.spacing(3),
-      marginLeft: "auto",
-      marginRight: "auto",
+      marginBottom: theme.spacing(3),
+      padding: theme.spacing(6),
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(2),
     },
   },
   button: {
     display: "flex",
     justifyContent: "flexEnd",
     marginTop: theme.spacing(3),
+    width: 100,
+    top: "43%",
+    position: "relative",
+  },
+  typography: {
+    marginBottom: theme.spacing(2),
   },
 }));
 
@@ -48,7 +54,7 @@ export default function FindOrdersForm() {
         console.log(secondName);
         break;
     }
-  }
+  };
 
   const sendRequest = async () => {
     const response = await axios({
@@ -60,36 +66,40 @@ export default function FindOrdersForm() {
 
   return (
     <Paper className={classes.paper} style={{ width: "48%" }}>
-      <div>
-        <Typography>Поиск записей по имени и фамилии</Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              value={firstName}
-              onChange={handleChange}
-              required
-              id="firstName"
-              name="firstName"
-              label="First name"
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              value={secondName}
-              onChange={handleChange}
-              required
-              id="secondName"
-              name="secondName"
-              label="Second name"
-              fullWidth
-            />
-          </Grid>
+      <Typography className={classes.typography}>
+        Поиск записей по имени и фамилии
+      </Typography>
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            value={firstName}
+            onChange={handleChange}
+            required
+            id="firstName"
+            name="firstName"
+            label="First name"
+            fullWidth
+          />
         </Grid>
-        <Button onClick={sendRequest} className={classes.button}>
-          Искать
-        </Button>
-      </div>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            value={secondName}
+            onChange={handleChange}
+            required
+            id="secondName"
+            name="secondName"
+            label="Second name"
+            fullWidth
+          />
+        </Grid>
+      </Grid>
+      <Button
+        onClick={sendRequest}
+        className={classes.button}
+        variant="outlined"
+      >
+        Искать
+      </Button>
     </Paper>
   );
 }

@@ -1,7 +1,7 @@
 import Grid from "@material-ui/core/Grid";
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
-import React, {useEffect, useState} from "react";
-import { makeStyles, Theme } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import { Button, makeStyles, Theme } from "@material-ui/core";
 import axios from "axios";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -9,8 +9,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginBottom: theme.spacing(3),
     [theme.breakpoints.up(600 + theme.spacing(3) + 2)]: {
       marginBottom: theme.spacing(3),
-      padding: theme.spacing(3),
+      padding: theme.spacing(2),
     },
+  },
+  button: {
+    marginLeft: theme.spacing(2),
+    display: "flex",
+    justifyContent: "flexEnd",
+    marginTop: theme.spacing(3),
+    width: 100,
   },
 }));
 
@@ -35,17 +42,8 @@ export default function DataTable() {
     },
   ]);
 
-  const sendRequest = async () => {
-    const response = await axios({
-      method: "GET",
-      url: "http://localhost:5000/api/OrderManagement",
-    });
-    updateRows(response.data);
-    console.log(response.data);
-  };
-
   const detailsRows = rows.map((row) => {
-     return  {
+    return {
       id: row.id,
       date: row.dateTime,
       firstName: row.fio.split(" ")[0],
@@ -56,20 +54,59 @@ export default function DataTable() {
   });
 
   useEffect(() => {
-    const request = axios({
+    axios({
       method: "GET",
       url: "http://localhost:5000/api/OrderManagement",
-    }).then( response => {
-      updateRows(response.data);
-      console.log(response.data);
-    }).catch( err => {
-      console.log(err);
     })
-  }, [])
+      .then((response) => {
+        updateRows(response.data);
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const onSelectionModelChange = (event: any) => {
+    const selectedIDs = new Set(event.selectionModel);
+    const selectedRowData = detailsRows.filter((row) => {
+      selectedIDs.has(row.id);
+    });
+    console.log(selectedRowData);
+    return selectedRowData;
+  };
+
+  const handlePurge = () => {};
 
   return (
-    <Grid style={{ height: 420, width: "100%" }} className={classes.table}>
-      <DataGrid columns={columns} rows={detailsRows} pageSize={5} />
+    <Grid style={{ height: 420, width: "100%" }}>
+      <Grid container>
+        <Button
+          color="secondary"
+          variant="contained"
+          onClick={handlePurge}
+          className={classes.button}
+        >
+          Удалить
+        </Button>
+        <Button
+          variant="contained"
+          onClick={handlePurge}
+          className={classes.button}
+        >
+          Обновить
+        </Button>
+      </Grid>
+      <Grid style={{ height: "100%" }} className={classes.table}>
+        <DataGrid
+          onRowSelected={(e) => onSelectionModelChange(e)}
+          columns={columns}
+          rows={detailsRows}
+          pageSize={5}
+          checkboxSelection
+          disableSelectionOnClick
+        />
+      </Grid>
     </Grid>
   );
 }

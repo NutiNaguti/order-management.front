@@ -11,17 +11,14 @@ import React, { ChangeEvent, useState } from "react";
 import axios from "axios";
 
 const useStyles = makeStyles((theme: Theme) => ({
-  appBar: {
-    position: "relative",
-  },
   paper: {
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
     padding: theme.spacing(2),
     [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
       marginTop: theme.spacing(6),
-      marginBottom: theme.spacing(6),
-      padding: theme.spacing(3),
+      marginBottom: theme.spacing(3),
+      padding: theme.spacing(6),
       marginLeft: "auto",
       marginRight: "auto",
     },
@@ -30,6 +27,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     justifyContent: "flexEnd",
     marginTop: theme.spacing(3),
+    width: 100,
+    top: "10%",
+    position: "relative",
+  },
+  typography: {
+    // marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
   },
 }));
 
@@ -42,7 +46,7 @@ export default function CreateOrderForm() {
   const [price, setPrice] = useState(0.0);
 
   const sendRequest = async () => {
-    const request = await axios({
+    await axios({
       method: "POST",
       url: "http://localhost:5000/api/OrderManagement",
       data: {
@@ -50,11 +54,13 @@ export default function CreateOrderForm() {
         description: shortDescription,
         price: price,
       },
-    }).then( response => {
-      console.log(response);
-    }).catch(err => {
-      console.log(err);
-    });
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -79,7 +85,7 @@ export default function CreateOrderForm() {
 
   return (
     <Paper className={classes.paper} style={{ width: "48%" }}>
-      <Typography>Форма заказа</Typography>
+      <Typography className={classes.typography}>Форма заказа</Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -127,8 +133,12 @@ export default function CreateOrderForm() {
           />
         </Grid>
       </Grid>
-      <Button onClick={sendRequest} className={classes.button}>
-        Создать заказ
+      <Button
+        onClick={sendRequest}
+        className={classes.button}
+        variant="outlined"
+      >
+        Создать
       </Button>
     </Paper>
   );
