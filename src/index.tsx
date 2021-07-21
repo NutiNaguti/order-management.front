@@ -3,10 +3,22 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {Provider} from "mobx-react";
+import mainStore from './stores/mainStore'
+
+const stores = {
+    mainStore,
+    orderManagerStore: mainStore.OrderManagerStore,
+    createOrderFormStore : mainStore.CreateOrderFormStore,
+    dataTableStore: mainStore.DataTableStore,
+    findOrderStore: mainStore.FindOrderFormStore
+};
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+      <Provider{...stores}>
+          <App />
+      </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
