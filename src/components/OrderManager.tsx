@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   AppBar,
   CssBaseline,
@@ -11,6 +11,7 @@ import Grid from "@material-ui/core/Grid";
 import DataTable from "./DataTable";
 import FindOrdersForm from "./FindOrdersForm";
 import CreateOrderForm from "./CreateOrderForm";
+import {Order} from "../interfaces/Order";
 
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
@@ -20,16 +21,18 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: "auto",
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
-    // [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-    //     width: 550,
-    //     marginLeft: 'auto',
-    //     marginRight: 'auto',
-    // },
   },
 }));
 
 export default function OrderManager() {
   const classes = useStyles();
+
+  const emptyOrderList: Order[] = [];
+  const [orders, setOrders] = useState(emptyOrderList);
+
+  function getOrderByFio(orders: Order[]) {
+    setOrders(orders);
+  }
 
   return (
     <React.Fragment>
@@ -48,8 +51,8 @@ export default function OrderManager() {
       <main>
         <Grid container className={classes.layout}>
           <CreateOrderForm />
-          <FindOrdersForm />
-          <DataTable />
+          <FindOrdersForm getOrderByFio={getOrderByFio}/>
+          <DataTable orders={orders}/>
         </Grid>
       </main>
     </React.Fragment>

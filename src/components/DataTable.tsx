@@ -3,6 +3,8 @@ import { DataGrid, GridColDef } from "@material-ui/data-grid";
 import React, { useEffect, useState } from "react";
 import { Button, makeStyles, Theme } from "@material-ui/core";
 import axios from "axios";
+import {Props} from "../interfaces/DataTableProps";
+import {Order} from "../interfaces/Order";
 
 const useStyles = makeStyles((theme: Theme) => ({
   table: {
@@ -30,20 +32,13 @@ const columns: GridColDef[] = [
   { field: "description", headerName: "Описание", width: 540 },
 ];
 
-export default function DataTable() {
+export default function DataTable(props: Props) {
   const emptyStringArray: string[] = [];
+  const emptyOrderList: Order[] = [];
 
   const classes = useStyles();
   const [deleted, setDeleted] = useState(emptyStringArray);
-  const [rows, updateRows] = useState([
-    {
-      id: "",
-      dateTime: "",
-      fio: "",
-      cost: "",
-      description: "",
-    },
-  ]);
+  const [rows, updateRows] = useState(emptyOrderList);
 
   const detailsRows = rows.map((row) => {
     return {
@@ -81,7 +76,7 @@ export default function DataTable() {
       .then((response) => {
         setDeleted([]);
         console.log(response);
-        updateTable();
+        // updateTable();
       })
       .catch((err) => {
         console.log(err);
@@ -89,8 +84,14 @@ export default function DataTable() {
   };
 
   useEffect(() => {
-    updateTable();
-  }, []);
+    console.log(props)
+    if (props.orders !== null) {
+      updateRows(props.orders);
+    }
+    else {
+      updateTable();
+    }
+  }, [props]);
 
   return (
     <Grid style={{ height: 420, width: "100%" }}>

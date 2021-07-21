@@ -9,7 +9,8 @@ import {
 import Grid from "@material-ui/core/Grid";
 import React, { ChangeEvent, useState } from "react";
 import axios from "axios";
-import { log } from "util";
+import {Order} from "../interfaces/Order";
+import {Prop} from "../interfaces/FindOrderFormProps";
 
 const useStyles = makeStyles((theme: Theme) => ({
   paper: {
@@ -37,11 +38,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default function FindOrdersForm() {
+export default function FindOrdersForm(props: Prop) {
   const classes = useStyles();
+  const emptyOrderList: Order[] = [];
 
   const [firstName, setFirstName] = useState("");
   const [secondName, setSecondName] = useState("");
+  const [orders, setOrders] = useState(emptyOrderList);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     switch (event.target.name) {
@@ -58,8 +61,8 @@ export default function FindOrdersForm() {
   };
 
   const sendRequest = async () => {
-    const fio: string = firstName + " " + secondName;
-    const response = await axios({
+    const fio: string = `${firstName} ${secondName}`;
+    await axios({
       method: "GET",
       url: "http://localhost:5000/api/OrderManagement/fio",
       params: {
@@ -67,9 +70,12 @@ export default function FindOrdersForm() {
       },
     })
       .then((response) => {
+        setOrders(response.data);
         console.log(response.data);
       })
       .catch((error) => {
+        const empty:Order[] = []
+        setOrders(empty)
         console.log(error);
       });
   };
@@ -104,7 +110,10 @@ export default function FindOrdersForm() {
         </Grid>
       </Grid>
       <Button
-        onClick={sendRequest}
+        onClick={() => {
+          sendRequest();
+          props.getOrderByFio(orders);
+        }}
         className={classes.button}
         variant="outlined"
       >
