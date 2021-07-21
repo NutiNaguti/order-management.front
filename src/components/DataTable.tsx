@@ -3,8 +3,8 @@ import { DataGrid, GridColDef } from "@material-ui/data-grid";
 import React, { useEffect, useState } from "react";
 import { Button, makeStyles, Theme } from "@material-ui/core";
 import axios from "axios";
-import {Props} from "../interfaces/DataTableProps";
-import {Order} from "../interfaces/Order";
+import { Props } from "../interfaces/DataTableProps";
+import { Order } from "../interfaces/Order";
 
 const useStyles = makeStyles((theme: Theme) => ({
   table: {
@@ -58,7 +58,7 @@ export default function DataTable(props: Props) {
     })
       .then((response) => {
         //if (response.data.length !== 0) {
-          updateRows(response.data);
+        updateRows(response.data);
         //}
       })
       .catch((err) => {
@@ -84,11 +84,10 @@ export default function DataTable(props: Props) {
   };
 
   useEffect(() => {
-    console.log(props)
+    console.log(props);
     if (props.orders !== null) {
       updateRows(props.orders);
-    }
-    else {
+    } else {
       updateTable();
     }
   }, [props]);
@@ -119,7 +118,14 @@ export default function DataTable(props: Props) {
       <Grid style={{ height: "100%" }} className={classes.table}>
         <DataGrid
           onRowSelected={(e) => {
-            setDeleted(deleted.concat(e.data.id));
+            console.log(e.data.id);
+            const index = deleted.indexOf(e.data.id);
+            console.log(index);
+            if (index > -1) {
+              setDeleted(deleted.filter(x => x !== e.data.id));
+            } else {
+              setDeleted(deleted.concat(e.data.id));
+            }
           }}
           columns={columns}
           rows={detailsRows}
