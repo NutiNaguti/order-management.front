@@ -77,6 +77,7 @@ export default function FindOrdersForm(props: Prop) {
       .catch((error) => {
         const empty:Order[] = []
         setOrders(empty)
+        props.getOrderByFio(orders);
         console.log(error);
       });
   };

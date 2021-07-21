@@ -1,6 +1,6 @@
 import Grid from "@material-ui/core/Grid";
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import { Button, makeStyles, Theme } from "@material-ui/core";
 import axios from "axios";
 import { Props } from "../interfaces/DataTableProps";
@@ -39,6 +39,7 @@ export default function DataTable(props: Props) {
   const classes = useStyles();
   const [deleted, setDeleted] = useState(emptyStringArray);
   const [rows, updateRows] = useState(emptyOrderList);
+  const [needRender, setNeedRender] = useState(false);
 
   const detailsRows = rows.map((row) => {
     return {
@@ -57,9 +58,7 @@ export default function DataTable(props: Props) {
       url: "http://localhost:5000/api/OrderManagement",
     })
       .then((response) => {
-        //if (response.data.length !== 0) {
         updateRows(response.data);
-        //}
       })
       .catch((err) => {
         console.log(err);
@@ -83,14 +82,17 @@ export default function DataTable(props: Props) {
       });
   };
 
+  useMemo(() =>
+    updateRows(props.orders),
+    [props.orders]
+  );
+
   useEffect(() => {
-    console.log(props);
-    if (props.orders !== null) {
-      updateRows(props.orders);
-    } else {
+    updateTable();
+    if (needRender)
       updateTable();
-    }
-  }, [props]);
+    setNeedRender(false);
+  }, [needRender]);
 
   return (
     <Grid style={{ height: 420, width: "100%" }}>
@@ -100,6 +102,7 @@ export default function DataTable(props: Props) {
           variant="contained"
           onClick={() => {
             deleteRows();
+            setNeedRender(true);
           }}
           className={classes.button}
         >

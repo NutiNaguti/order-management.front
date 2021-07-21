@@ -9,6 +9,7 @@ import {
 import Grid from "@material-ui/core/Grid";
 import React, {ChangeEvent, useState} from "react";
 import axios from "axios";
+import {Prop} from "../interfaces/CreateOrderFormProps";
 
 const useStyles = makeStyles((theme: Theme) => ({
   paper: {
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default function CreateOrderForm() {
+export default function CreateOrderForm(props: Prop) {
   const classes = useStyles();
 
   const [firstName, setFirstName] = useState("");
