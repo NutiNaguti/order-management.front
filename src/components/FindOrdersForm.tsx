@@ -72,6 +72,7 @@ export default function FindOrdersForm(props: Prop) {
       .then((response) => {
         setOrders(response.data);
         console.log(response.data);
+        props.getOrderByFio(orders);
       })
       .catch((error) => {
         const empty:Order[] = []
@@ -110,10 +111,7 @@ export default function FindOrdersForm(props: Prop) {
         </Grid>
       </Grid>
       <Button
-        onClick={() => {
-          sendRequest();
-          props.getOrderByFio(orders);
-        }}
+        onClick={sendRequest}
         className={classes.button}
         variant="outlined"
       >

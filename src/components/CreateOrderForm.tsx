@@ -43,16 +43,21 @@ export default function CreateOrderForm() {
   const [firstName, setFirstName] = useState("");
   const [secondName, setSecondName] = useState("");
   const [shortDescription, setShortDescription] = useState("");
-  const [price, setPrice] = useState(0.0);
+  const [price, setPrice] = useState(0);
+
+  const validate = (): boolean => {
+    return !!(firstName && secondName && shortDescription);
+  }
 
   const sendRequest = async () => {
+    if (!validate()) return;
     await axios({
       method: "POST",
       url: "http://localhost:5000/api/OrderManagement/create",
       data: {
         fio: `${firstName} ${secondName}`,
         description: shortDescription,
-        price: price,
+        cost: price,
       },
     })
       .then((response) => {

@@ -57,7 +57,9 @@ export default function DataTable(props: Props) {
       url: "http://localhost:5000/api/OrderManagement",
     })
       .then((response) => {
-        if (response.data.length !== 0) updateRows(response.data);
+        //if (response.data.length !== 0) {
+          updateRows(response.data);
+        //}
       })
       .catch((err) => {
         console.log(err);
@@ -67,11 +69,9 @@ export default function DataTable(props: Props) {
   const deleteRows = () => {
     console.log(deleted);
     axios({
-      method: "DELETE",
-      url: "http://localhost:5000/api/OrderManagement/delete",
-      data: {
-        deleted,
-      },
+      method: "delete",
+      url: "http://localhost:5000/api/OrderManagement/id",
+      data: deleted,
     })
       .then((response) => {
         setDeleted([]);
