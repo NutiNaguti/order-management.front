@@ -29,14 +29,9 @@ export default function OrderManager() {
 
   const emptyOrderList: Order[] = [];
   const [orders, setOrders] = useState(emptyOrderList);
-  const [needUpdate, setNeedUpdate] = useState(false);
 
   function getOrderByFio(orders: Order[]) {
     setOrders(orders);
-  }
-
-  function needUpdateTable(val: boolean) {
-    setNeedUpdate(val);
   }
 
   return (

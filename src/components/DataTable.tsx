@@ -75,7 +75,6 @@ export default function DataTable(props: Props) {
       .then((response) => {
         setDeleted([]);
         console.log(response);
-        // updateTable();
       })
       .catch((err) => {
         console.log(err);
